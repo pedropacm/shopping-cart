@@ -24,42 +24,64 @@ import com.facilit.shoppingcart.util.TestObjects;
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
 @AutoConfigureTestDatabase(replace = Replace.ANY)
-class ShoppingCartApplicationTests {
+class ProductTests {
 
 	@Autowired
 	private MockMvc mockMvc;
-	
+
 	@Test
 	public void listingEmptyProductsList() throws Exception {
 
-		this.mockMvc.perform(get("/api/v1/products")).andDo(print()).andExpect(status().isOk())
-		.andExpect(jsonPath("$").isArray());
-		
-		this.mockMvc.perform(get("/api/v1/products")).andDo(print()).andExpect(status().isOk())
+		this.mockMvc.perform(get("/api/v1/products"))
+		.andDo(print())
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$").isArray())
 		.andExpect(jsonPath("$").isEmpty());
+
 	}
-	
+
 	@Test
 	public void creatingNewProduct() throws Exception {
 
 		this.mockMvc.perform(post("/api/v1/product")
 				.content(TestObjects.PRODUCT_A)
 				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
-				.andDo(print())
-				.andExpect(status().isOk());
+		.andDo(print())
+		.andExpect(status().isOk());
 	}
 
+	@Test
+	public void creatingNewProductWithWrongDataType() throws Exception {
+
+		this.mockMvc.perform(post("/api/v1/product")
+				.content(TestObjects.PRODUCT_WRONG_DATA_TYPE)
+				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+		.andDo(print())
+		.andExpect(status().isBadRequest());
+	}
+	
+	@Test
+	public void creatingNewProductWithIncompleteData() throws Exception {
+
+		this.mockMvc.perform(post("/api/v1/product")
+				.content(TestObjects.PRODUCT_INCOMPLETE_DATA)
+				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+		.andDo(print())
+		.andExpect(status().isUnprocessableEntity());
+	}
+	
 	@Test
 	public void listingOneSizedProductsList() throws Exception {
 
 		this.mockMvc.perform(post("/api/v1/product")
 				.content(TestObjects.PRODUCT_A)
 				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON));
-		
-		this.mockMvc.perform(get("/api/v1/products")).andDo(print()).andExpect(status().isOk())
-		.andExpect(jsonPath("$").isArray());
-		
-		this.mockMvc.perform(get("/api/v1/products")).andDo(print()).andExpect(status().isOk())
+
+		this.mockMvc.perform(get("/api/v1/products"))
+		.andDo(print())
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$").isArray())
 		.andExpect(jsonPath("$").isNotEmpty());
+
 	}
 }

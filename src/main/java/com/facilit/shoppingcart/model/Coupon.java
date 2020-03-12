@@ -11,9 +11,9 @@ import javax.persistence.Table;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name = "users")
+@Table(name = "coupon")
 @EntityListeners(AuditingEntityListener.class)
-public class Product {
+public class Coupon {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,11 +22,8 @@ public class Product {
 	@Column(name = "name", nullable = false)
     private String name;
 	
-	@Column(name = "description", nullable = false)
-    private String description;
-	
-	@Column(name = "price", nullable = false)
-    private Float price;
+	@Column(name = "discount", nullable = false)
+    private Float discount;
 
 	/**
 	 * @return the id
@@ -57,31 +54,17 @@ public class Product {
 	}
 
 	/**
-	 * @return the description
+	 * @return the discount
 	 */
-	public String getDescription() {
-		return description;
+	public float getDiscount() {
+		return discount;
 	}
 
 	/**
-	 * @param description the description to set
+	 * @param dicount the discount to set
 	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	/**
-	 * @return the price
-	 */
-	public Float getPrice() {
-		return price;
-	}
-
-	/**
-	 * @param price the price to set
-	 */
-	public void setPrice(Float price) {
-		this.price = price;
+	public void setDiscount(float discount) {
+		this.discount = discount;
 	}
 	
 	
