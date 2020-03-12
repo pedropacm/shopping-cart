@@ -1,43 +1,41 @@
 package com.facilit.shoppingcart.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 @Entity
 @Table(name = "coupon")
 @EntityListeners(AuditingEntityListener.class)
+@Data
+@EqualsAndHashCode(exclude = "carts")
 public class Coupon {
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-	
-	@Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 	
 	@Column(name = "discount", nullable = false)
     private Float discount;
-
-	/**
-	 * @return the id
-	 */
-	public long getId() {
-		return id;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(long id) {
-		this.id = id;
-	}
+	
+	@ManyToMany(mappedBy = "coupons")
+	@JsonIgnoreProperties("coupons")
+    private Set<Cart> carts = new HashSet<>();
 
 	/**
 	 * @return the name
@@ -65,6 +63,20 @@ public class Coupon {
 	 */
 	public void setDiscount(float discount) {
 		this.discount = discount;
+	}
+	
+	/**
+	 * @return the carts
+	 */
+	public Set<Cart> getCarts() {
+		return carts;
+	}
+
+	/**
+	 * @param carts the carts to set
+	 */
+	public void setCarts(Set<Cart> carts) {
+		this.carts = carts;
 	}
 	
 	
